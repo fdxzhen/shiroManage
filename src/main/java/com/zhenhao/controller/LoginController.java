@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -40,10 +41,19 @@ public class LoginController {
 
     @PostMapping("/login")
     @ResponseBody
-    public ResponseBo login(HttpServletRequest request, String username, String password, Boolean rememberMe) {
+    public ResponseBo login(HttpServletRequest request, String username, String password,String code, Boolean rememberMe) {
+
+        HttpSession session = request.getSession();
+        String  verifyCode = (String) session.getAttribute("verifyCode");
+        Date  verifyTime = (Date) session.getAttribute("verifyTime");
+
 
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             return ResponseBo.error(-999, "用户名密码为空");
+        }
+
+        if (code==null || !code.equalsIgnoreCase(verifyCode)){
+            return ResponseBo.error(-999, "验证码错误");
         }
 
         User user = userService.findByUserName(username);
@@ -63,7 +73,7 @@ public class LoginController {
         String authorization = JWTUtil.sign(username, password);
 
         redisUtils.set(authorization, username, 30L, TimeUnit.MINUTES);
-        HttpSession session = request.getSession();
+
 
         session.setAttribute("username",username);
         if (redisUtils.get(username)!=null){
@@ -96,7 +106,6 @@ public class LoginController {
 
     @RequestMapping("/index")
     public String index(Model model) {
-        // ��¼�ɺ󣬼���ͨ��Subject��ȡ��¼���û���Ϣ
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         model.addAttribute("user", user);
         return "index";
