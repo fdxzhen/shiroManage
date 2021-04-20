@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.concurrent.TimeUnit;
@@ -64,7 +63,9 @@ public class LoginController {
         String authorization = JWTUtil.sign(username, password);
 
         redisUtils.set(authorization, username, 30L, TimeUnit.MINUTES);
+        HttpSession session = request.getSession();
 
+        session.setAttribute("username",username);
         if (redisUtils.get(username)!=null){
             return ResponseBo.error("您登录操作频繁，请稍后再登录");
         }else{
