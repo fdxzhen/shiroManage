@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhenhao.mapper.OperateLogMapper">
+    <resultMap type="com.zhenhao.bean.OperateLog" id="OperateLog">
+        <id column="log_id" property="logId" javaType="java.lang.Integer" jdbcType="VARCHAR"/>
+        <id column="login_user" property="loginUser" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="request_url" property="requestURL" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="request_param" property="requestParam" javaType="java.util.Date" jdbcType="VARCHAR"/>
+        <id column="request_ip" property="requestIP" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="request_type" property="requestType" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="request_class_method" property="requestClassMethod" javaType="java.util.Date" jdbcType="DATE"/>
+        <id column="ope_time" property="opeTime" javaType="java.util.Date" jdbcType="DATE"/>
+    </resultMap>
+
+    <insert id="insertOperateLog" parameterType="com.zhenhao.bean.OperateLog">
+
+        insert into t_operate_log
+        values (#{logId}, #{loginUser}, #{requestURL}, #{requestParam}, #{requestIP}, #{requestType},
+                #{requestClassMethod}, #{opeTime});
+
+    </insert>
+
+</mapper>
