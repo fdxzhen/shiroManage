@@ -51,7 +51,7 @@ public class WebLogAspect {
         operateLog.setRequestURL(request.getRequestURI());
         operateLog.setRequestParam(request.getQueryString());
         operateLog.setRequestType(request.getMethod());
-        operateLog.setRequestClassMethod(signature.getDeclaringTypeName() +" "+ signature.getName());
+        operateLog.setRequestClassMethod(signature.getDeclaringTypeName() +"."+ signature.getName());
         operateLog.setRequestIP(request.getRemoteAddr());
         operateLog.setOpeTime(new Date());
 
